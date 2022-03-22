@@ -18,7 +18,19 @@ class App extends Component {
     ],
     filter: '',
   };
-
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    this.setState({
+      contacts: JSON.parse(contacts),
+    });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log('1');
+    const nextState = this.state.contacts;
+    if (prevState.contacts !== nextState) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
   addContact = ({ name, number }) => {
     const findName = this.state.contacts.find(
       contact => contact.name.toLowerCase() === name.toLowerCase()

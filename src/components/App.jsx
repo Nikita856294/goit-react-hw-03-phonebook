@@ -19,15 +19,17 @@ class App extends Component {
     filter: '',
   };
   componentDidMount() {
+    localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     const contacts = localStorage.getItem('contacts');
+
     this.setState({
       contacts: JSON.parse(contacts),
     });
   }
   componentDidUpdate(prevProps, prevState) {
-    console.log('1');
     const nextState = this.state.contacts;
     if (prevState.contacts !== nextState) {
+      console.log(this.state.contacts);
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
   }
@@ -58,9 +60,11 @@ class App extends Component {
   };
   render() {
     const nozmalizedContacts = this.state.filter.toLowerCase();
+    console.log(this.state.contacts);
     const filteredContacts = this.state.contacts.filter(contact =>
       contact.name.toLowerCase().includes(nozmalizedContacts)
     );
+
     return (
       <div className="root">
         <GlobalStyle />
@@ -68,7 +72,7 @@ class App extends Component {
           <h1>Phonebook</h1>
           <Form onSubmit={this.addContact} />
           <Section title={'Contacts'}>
-            <Filter value={this.filter} onChange={this.changeFilter} />
+            <Filter value={this.state.filter} onChange={this.changeFilter} />
             <ContactList
               contacts={filteredContacts}
               deleteContact={this.deleteContact}
